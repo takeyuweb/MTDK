@@ -1,0 +1,6 @@
+*.iml
+.idea
+data/mt/*
+data/files/*
+!**/.gitkeep
+mt.bak

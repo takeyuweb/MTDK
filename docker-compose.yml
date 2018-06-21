@@ -1,0 +1,57 @@
+version: '3'
+volumes:
+  mysql-data:
+    driver: 'local'
+services:
+  httpd:
+    build: ./docker
+    environment:
+      APACHE_RUN_USER: www-data
+      APACHE_RUN_GROUP: www-data
+    volumes:
+      - ./data/mt:/data/mt:rw
+      - ./data/files:/data/files:rw
+    ports:
+      - '8080:8080'
+    networks:
+      - default
+    depends_on:
+      - db
+      - memcached
+      - mailcatcher
+      - phpmyadmin
+  db:
+    image: mysql:5.7
+    command: '--innodb-file-format=Barracuda --innodb-file-per-table=true --innodb-large-prefix=true'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+      TZ: /usr/share/zoneinfo/Asia/Tokyo
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - mysql-data:/var/lib/mysql
+    networks:
+      - default
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-proot', '-P', '3306']
+      interval: 1m
+      timeout: 10s
+      retries: 5
+  memcached:
+    image: memcached
+    networks:
+      - default
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - '8081:1080'
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - '8082:80'
+

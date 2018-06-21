@@ -1,0 +1,18 @@
+CGIPath        http://localhost:8080/mt/
+StaticWebPath  /mt/mt-static
+StaticFilePath /data/mt/mt-static
+BaseSitePath   /data/files
+
+ObjectDriver DBI::mysql
+Database mt
+DBUser root
+DBPassword root
+DBHost db
+
+MailTransfer smtp
+SMTPServer mailcatcher
+SMTPPort 1025
+
+DefaultLanguage ja
+MemcachedServers memcached:11211
+DebugMode 2
