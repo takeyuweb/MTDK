@@ -30,6 +30,7 @@ RUN cpanm IO::Socket::SSL
 RUN cpanm MIME::Parser
 RUN cpanm XML::LibXML::SAX
 RUN cpanm Cache::Memcached
+RUN cpanm Net::FTP
 
 RUN usermod -u 1000 www-data \
     && groupmod -g 1000 www-data

@@ -20,6 +20,7 @@ services:
       - memcached
       - mailcatcher
       - phpmyadmin
+      - pureftpd
   db:
     image: mysql:5.7
     command: '--innodb-file-format=Barracuda --innodb-file-per-table=true --innodb-large-prefix=true'
@@ -54,4 +55,11 @@ services:
       PMA_PASSWORD: root
     ports:
       - '8082:80'
-
+  pureftpd:
+    image: stilliard/pure-ftpd
+    volumes:
+      - ./ftp-data:/data
+    environment:
+      FTP_USER_NAME: ftpuser
+      FTP_USER_PASS: ftppass
+      FTP_USER_HOME: /data
